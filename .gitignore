@@ -1,1 +1,5 @@
 pkg
+.* # Ignore all dotfiles
+!.gitignore
+jstools/target
+maven-jstools-plugin/target
