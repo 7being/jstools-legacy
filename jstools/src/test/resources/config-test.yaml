@@ -1,0 +1,24 @@
+compress:
+- type: JS
+  version: 0.0.1
+  minfile: minfile
+  #allfile: allfile
+  basedir: js
+  includes:
+  - $.js
+  - a/
+  - c/C2.js
+  - c/c/C3.js
+  - c/c/C4.js
+  - c/C2.js
+  - c/
+  - b/**/*.js
+
+jsunit:
+- source: js/sources
+  test: js/tests
+  workdir: js/temp/jsunit-tests
+  logsdir: js/temp/jsunit-reports
+  browsers:
+  - firefox
+  - safari

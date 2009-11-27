@@ -1,0 +1,26 @@
+compress:
+- type: JS
+  id: home.html
+  version: 0.0.1
+  minfile: minfile
+  allfile: allfile
+  basedir: js
+  includes:
+  - $.js
+  - a/
+  - c/C2.js
+  - c/c/C3.js
+  - c/c/C4.js
+  - c/C2.js
+  - c/
+  - b/**/*.js
+
+jsunit:
+- source:
+  test:
+  workdir:
+  logsdir:
+  port: 8080
+  closebro: true
+  browsers:
+  - c:\work\ie.exe
