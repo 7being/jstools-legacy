@@ -26,7 +26,12 @@ public class RunMojo extends AbstractMojo
 	/**
 	 * @parameter expression="${basedir}"
 	 */
-	private File baseDir;
+	private File baseDirectory;
+	
+	/**
+	 * @parameter expression="${project.build.outputDirectory}"
+	 */
+	private File outputDirectory;
 	
 	/**
 	 * @parameter expression="${project.build.directory}/jsunit-tests"
@@ -48,7 +53,11 @@ public class RunMojo extends AbstractMojo
 		}
 		
 		
-		JsToolsBean config = new JsToolsLoader().load(jstoolsConfigFile, baseDir.getAbsoluteFile());
+		JsToolsBean config = new JsToolsLoader().load(
+			jstoolsConfigFile, 
+			baseDirectory.getAbsoluteFile(),
+			outputDirectory.getAbsoluteFile()
+		);
 		
 		setDefaultJsUnitParams(config.getJsunit());
 		

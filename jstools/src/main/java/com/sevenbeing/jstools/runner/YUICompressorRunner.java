@@ -96,7 +96,7 @@ public class YUICompressorRunner extends AbstractRunner
 		String fileName = isMin ? bean.getMinfile() : bean.getAllfile();
 		String endWith = (isMin ? "min" : "all") + "." + bean.getType().name().toLowerCase();
 
-		String filePath = bean.getBasedir() + File.separator + fileName + "-" + bean.getVersion() + "."
+		String filePath = fileName + "-" + bean.getVersion() + "."
 				+ endWith;
 		return new File(filePath);
 	}
