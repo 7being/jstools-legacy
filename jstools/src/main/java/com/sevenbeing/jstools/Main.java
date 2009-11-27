@@ -2,8 +2,8 @@ package com.sevenbeing.jstools;
 
 import java.io.File;
 
-import com.sevenbeing.jstools.bean.Configuration;
-import com.sevenbeing.jstools.runner.ConfigurationRunner;
+import com.sevenbeing.jstools.bean.JsToolsBean;
+import com.sevenbeing.jstools.runner.JsToolsRunner;
 
 public class Main
 {
@@ -29,7 +29,7 @@ public class Main
 		
 		System.out.println("JSTools is using config file: " + configFile.getAbsolutePath());
 		
-		Configuration config = Configuration.load(configFile);
-		new ConfigurationRunner().go(config);
+		JsToolsBean config = JsToolsLoader.load(configFile, configFile.getAbsoluteFile());
+		new JsToolsRunner().go(config);
 	}
 }

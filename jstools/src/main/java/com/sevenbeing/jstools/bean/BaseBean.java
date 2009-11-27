@@ -56,6 +56,6 @@ public class BaseBean
 			System.out.println("Property " + fieldName + " not found.");
 		}
 
-		return new File(basedir, fieldValue);
+		return new File(fieldValue).isAbsolute() ? new File(fieldValue) : new File(basedir, fieldValue);
 	}
 }

@@ -7,10 +7,9 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
-import com.sevenbeing.jstools.bean.CompressBean;
-import com.sevenbeing.jstools.bean.Configuration;
+import com.sevenbeing.jstools.bean.JsToolsBean;
 import com.sevenbeing.jstools.bean.JsUnitBean;
-import com.sevenbeing.jstools.runner.ConfigurationRunner;
+import com.sevenbeing.jstools.runner.JsToolsRunner;
 
 /**
  * @goal run
@@ -22,7 +21,7 @@ public class RunMojo extends AbstractMojo
 	 * @parameter expression="${basedir}/src/main/resources/jstools.yaml"
 	 * @required
 	 */
-	private File jstoolsConfig;
+	private File jstoolsConfigFile;
 	
 	/**
 	 * @parameter expression="${basedir}"
@@ -41,30 +40,19 @@ public class RunMojo extends AbstractMojo
 	
 	public void execute() throws MojoExecutionException, MojoFailureException
 	{
-		getLog().info("Running jstools plugin");
-		Configuration config = Configuration.load(jstoolsConfig);
+		welcome();
 		
-		setDefaultCompressParams(config.getCompress());
+		if (!jstoolsConfigFile.exists())
+		{
+			throw new MojoFailureException("JsTools requires src/main/resources/jstools.yaml configuration file");
+		}
+		
+		
+		JsToolsBean config = JsToolsLoader.load(jstoolsConfigFile, baseDir.getAbsoluteFile());
+		
 		setDefaultJsUnitParams(config.getJsunit());
 		
-		new ConfigurationRunner().go(config);
-	}
-	
-	private void setDefaultCompressParams(List<CompressBean> beans)
-	{
-		if (null == beans) return;
-		
-		for (CompressBean bean : beans)
-		{
-			if (null == bean.getBasedir())
-			{
-				bean.setBasedir(baseDir.getAbsolutePath());
-			}
-			else
-			{
-				bean.setBasedir(new File(baseDir, bean.getBasedir()).getAbsolutePath());
-			}
-		}
+		new JsToolsRunner().go(config);
 	}
 	
 	private void setDefaultJsUnitParams(List<JsUnitBean> beans)
@@ -75,9 +63,16 @@ public class RunMojo extends AbstractMojo
 		{
 			bean.setWorkdir(jsunitWorkDirectory.getAbsolutePath());
 			bean.setLogsdir(jsunitLogsDirectory.getAbsolutePath());
-			bean.setBasedir(baseDir.getAbsolutePath());
 		}
 	}
+	
+	private void welcome()
+	{
+		getLog().info("------------------------------------------------------------------------");
+		getLog().info("--------------------  Running jstools plugin  --------------------------");
+		getLog().info("------------------------------------------------------------------------");
+	}
+	
 
 }
 

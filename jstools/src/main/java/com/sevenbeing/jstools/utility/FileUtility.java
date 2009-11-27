@@ -81,7 +81,7 @@ public class FileUtility
 		unzip.execute();
 	}
 
-	public static File concat(String baseDir, String[] includes)
+	public static File concat(File baseDir, String[] includes)
 	{
 		File result = null;
 		try
@@ -112,7 +112,7 @@ public class FileUtility
 
 		FileList fileList = new FileList();
 		fileList.setProject(ant);
-		fileList.setDir(new File(baseDir));
+		fileList.setDir(baseDir);
 		fileList.setFiles(fileNames);
 
 		Concat concat = (Concat) ant.createTask("concat");

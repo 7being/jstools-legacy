@@ -12,9 +12,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sevenbeing.jstools.bean.Configuration;
+import com.sevenbeing.jstools.bean.JsToolsBean;
 import com.sevenbeing.jstools.runner.AbstractRunner;
-import com.sevenbeing.jstools.runner.ConfigurationRunner;
+import com.sevenbeing.jstools.runner.JsToolsRunner;
 
 public class ConfigurationRunnerTest
 {
@@ -23,7 +23,7 @@ public class ConfigurationRunnerTest
 	@Before
 	public void setUp()
 	{
-		runner = new ConfigurationRunner();
+		runner = new JsToolsRunner();
 	}
 
 	@Test

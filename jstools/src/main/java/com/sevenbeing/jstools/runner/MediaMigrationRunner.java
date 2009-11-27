@@ -3,7 +3,7 @@ package com.sevenbeing.jstools.runner;
 import java.util.List;
 
 import com.sevenbeing.jstools.bean.CompressBean;
-import com.sevenbeing.jstools.bean.Configuration;
+import com.sevenbeing.jstools.bean.JsToolsBean;
 import com.sevenbeing.jstools.bean.MigrationBean;
 
 public class MediaMigrationRunner extends AbstractRunner
@@ -13,7 +13,7 @@ public class MediaMigrationRunner extends AbstractRunner
 	@Override
 	protected void run(Object configuration)
 	{
-		Configuration config = (Configuration) configuration;
+		JsToolsBean config = (JsToolsBean) configuration;
 		if (null == config.getMigration()) return;
 		compressBeans = config.getCompress();
 		

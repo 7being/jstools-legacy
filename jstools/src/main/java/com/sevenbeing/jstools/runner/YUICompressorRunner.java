@@ -24,8 +24,9 @@ public class YUICompressorRunner extends AbstractRunner
 	protected void run(Object bean)
 	{
 		CompressBean compressBean = (CompressBean) bean;
-
-		File tmp = FileUtility.concat(compressBean.getBasedir(), compressBean.getIncludes());
+		System.out.println("********************");
+		System.out.println(compressBean.getBasedir());
+		File tmp = FileUtility.concat(new File(compressBean.getBasedir()), compressBean.getIncludes());
 
 		allInOneAny(compressBean, tmp);
 

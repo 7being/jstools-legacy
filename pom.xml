@@ -19,8 +19,8 @@
       </developers>
 
 	<modules>
-		<module>jstools</module>
-		<module>maven-jstools-plugin</module>
+            <module>jstools</module>
+            <module>maven-jstools-plugin</module>
 	</modules>
 
 </project>

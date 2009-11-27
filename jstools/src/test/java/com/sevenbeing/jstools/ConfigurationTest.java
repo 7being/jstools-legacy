@@ -8,7 +8,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.sevenbeing.jstools.bean.CompressBean;
-import com.sevenbeing.jstools.bean.Configuration;
+import com.sevenbeing.jstools.bean.JsToolsBean;
 import com.sevenbeing.jstools.bean.JsUnitBean;
 
 public class ConfigurationTest
