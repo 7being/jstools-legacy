@@ -52,7 +52,7 @@ public class YUICompressorRunner extends AbstractRunner
 	{
 		if (null != bean.getAllfile())
 		{
-			File realAll = getFinalName(bean, Type.ALL);
+			File realAll = getFinalFile(bean, Type.ALL);
 			FileUtility.copy(tempAll, realAll);
 		}
 	}
@@ -64,7 +64,7 @@ public class YUICompressorRunner extends AbstractRunner
 			JavaScriptCompressor compressor = new JavaScriptCompressor(new InputStreamReader(new FileInputStream(
 					tempAll)), new ToolErrorReporter(true));
 
-			File min = getFinalName(bean, Type.MIN);
+			File min = getFinalFile(bean, Type.MIN);
 
 			Writer writer = new OutputStreamWriter(new FileOutputStream(min), "UTF-8");
 			compressor.compress(writer, Integer.MAX_VALUE, false, false, false, false);
@@ -80,7 +80,7 @@ public class YUICompressorRunner extends AbstractRunner
 		{
 			CssCompressor compressor = new CssCompressor(new InputStreamReader(new FileInputStream(tempAll)));
 
-			File min = getFinalName(bean, Type.MIN);
+			File min = getFinalFile(bean, Type.MIN);
 
 			Writer writer = new OutputStreamWriter(new FileOutputStream(min), "UTF-8");
 			compressor.compress(writer, Integer.MAX_VALUE);
@@ -89,7 +89,7 @@ public class YUICompressorRunner extends AbstractRunner
 		}
 	}
 
-	private File getFinalName(CompressBean bean, Type type)
+	private File getFinalFile(CompressBean bean, Type type)
 	{
 		boolean isMin = (type == Type.MIN);
 

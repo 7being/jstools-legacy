@@ -29,7 +29,7 @@ public class Main
 		
 		System.out.println("JSTools is using config file: " + configFile.getAbsolutePath());
 		
-		JsToolsBean config = JsToolsLoader.load(configFile, configFile.getAbsoluteFile());
+		JsToolsBean config = new JsToolsLoader().load(configFile, configFile.getAbsoluteFile());
 		new JsToolsRunner().go(config);
 	}
 }

@@ -48,7 +48,7 @@ public class RunMojo extends AbstractMojo
 		}
 		
 		
-		JsToolsBean config = JsToolsLoader.load(jstoolsConfigFile, baseDir.getAbsoluteFile());
+		JsToolsBean config = new JsToolsLoader().load(jstoolsConfigFile, baseDir.getAbsoluteFile());
 		
 		setDefaultJsUnitParams(config.getJsunit());
 		

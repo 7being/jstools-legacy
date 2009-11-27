@@ -12,12 +12,25 @@ import com.sevenbeing.jstools.bean.JsToolsBean;
 
 public class JsToolsLoader
 {
-
-	public static JsToolsBean load(File configFile, File alternateBaseDir)
+	private JsToolsBean parentBean;
+	private List<BaseBean> childrenBeans = null;
+	
+	public JsToolsBean load(File configFile, File alternateBaseDir)
 	{
 		configFile = configFile.getAbsoluteFile();
 		alternateBaseDir = alternateBaseDir.getAbsoluteFile();
 		
+		parentBean = parseConfigFile(configFile);
+		childrenBeans = getChildrenBeans(parentBean);
+
+		fixBeansBaseDirTo(alternateBaseDir);
+		setVersionIfNotProvided();
+
+		return parentBean;
+	}
+	
+	private JsToolsBean parseConfigFile(File configFile)
+	{
 		Reader reader = null;
 		try
 		{
@@ -28,33 +41,48 @@ public class JsToolsLoader
 			e.printStackTrace();
 		}
 
-		JsToolsBean config = (JsToolsBean) JsToolsBean.getYamlLoader().load(reader);
-
-		fixBeansBaseDirTo(config, alternateBaseDir);
-
-		return config;
+		return (JsToolsBean) JsToolsBean.getYamlLoader().load(reader);
+	}
+	
+	private List<BaseBean> getChildrenBeans(JsToolsBean config)
+	{
+		List<BaseBean> result = new ArrayList<BaseBean>();
+		if (null != config.getCompress()) result.addAll(config.getCompress());
+		if (null != config.getJsunit()) result.addAll(config.getJsunit());
+		return result;
+	}
+	
+	private void setVersionIfNotProvided()
+	{
+		String globalVersion = parentBean.getVersion();
+		if (null != globalVersion)
+		{
+			for (BaseBean bean : childrenBeans)
+			{
+				if (null == bean.getVersion())
+				{
+					bean.setVersion(globalVersion);
+				}
+			}
+		}
 	}
 
-	private static void fixBeansBaseDirTo(JsToolsBean config, File alternateBaseDir)
+	private void fixBeansBaseDirTo(File alternateBaseDir)
 	{
 		// fix top level base dir for JsToolsBean
-		fixBaseDir(config, alternateBaseDir);
+		fixBaseDir(parentBean, alternateBaseDir);
 		
-		File correctBaseDir = new File(config.getBasedir());
+		File correctBaseDir = new File(parentBean.getBasedir());
 		
 		// fix children base dir of JsToolsBean
-		List<BaseBean> beans = new ArrayList<BaseBean>();
-		if (null != config.getCompress()) beans.addAll(config.getCompress());
-		if (null != config.getJsunit()) beans.addAll(config.getJsunit());
-		
-		for (BaseBean bean : beans)
+		for (BaseBean bean : childrenBeans)
 		{
 			fixBaseDir(bean, correctBaseDir);
 		}
 		
 	}
 	
-	private static void fixBaseDir(BaseBean bean, File alternateBaseDir)
+	private void fixBaseDir(BaseBean bean, File alternateBaseDir)
 	{
 		if (null == bean.getBasedir())
 		{

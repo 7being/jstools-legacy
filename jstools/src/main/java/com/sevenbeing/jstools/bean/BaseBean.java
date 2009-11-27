@@ -4,6 +4,7 @@ public class BaseBean
 {
 	private String id;
 	private String basedir;
+	private String version;
 	private Boolean skip = false;
 
 	public String getId()
@@ -35,4 +36,15 @@ public class BaseBean
 	{
 		this.skip = skip;
 	}
+
+	public String getVersion()
+	{
+		return version;
+	}
+
+	public void setVersion(String version)
+	{
+		this.version = version;
+	}
+	
 }
