@@ -5,6 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
@@ -81,39 +86,24 @@ public class FileUtility
 		unzip.execute();
 	}
 
-	public static File concat(File baseDir, String[] includes)
+	public static File concat(File baseDir, String[] includes, String[] excludes)
 	{
 		File result = null;
 		try
 		{
-			result = File.createTempFile("merge", "tmp");
+			result = File.createTempFile("concat", "tmp");
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 
-		String fileNames = "";
-
-		for (String name : includes)
-		{
-			DirectoryScanner scanner = new DirectoryScanner();
-			scanner.setIncludes(new String[] { name });
-			scanner.setExcludes(new String[] { "**/.*/" });
-			scanner.setBasedir(baseDir);
-			scanner.scan();
-			for (String file : scanner.getIncludedFiles())
-			{
-				if (!fileNames.contains(file)) fileNames += (file + ",");
-			}
-		}
-
-		fileNames = (fileNames.length() > 0) ? fileNames.substring(0, fileNames.length() - 1) : fileNames;
+		String[] files = scanFiles(baseDir, includes, excludes);
 
 		FileList fileList = new FileList();
 		fileList.setProject(ant);
 		fileList.setDir(baseDir);
-		fileList.setFiles(fileNames);
+		fileList.setFiles(StringUtility.join(files, ","));
 
 		Concat concat = (Concat) ant.createTask("concat");
 		concat.setAppend(true);
@@ -123,6 +113,39 @@ public class FileUtility
 
 		concat.execute();
 		return result;
+	}
+	
+	public static String[] scanFiles(File baseDir, String[] includes, String[] excludes)
+	{
+		List<String> result = new ArrayList<String>();
+		Set<String> already = new HashSet<String>();
+
+		if (includes == null) includes = new String[0];
+		if (excludes == null) excludes = new String[0];
+		
+		List<String> excludeList = new ArrayList<String>();
+		excludeList.addAll(Arrays.asList(excludes));
+		excludeList.add("**/.*/");
+		excludes = excludeList.toArray(new String[0]);
+		
+		for (String include : includes)
+		{
+			DirectoryScanner scanner = new DirectoryScanner();
+			scanner.setIncludes(new String[] { include });
+			scanner.setExcludes(excludes);
+			scanner.setBasedir(baseDir);
+			scanner.scan();
+			for (String file : scanner.getIncludedFiles())
+			{
+				if (!already.contains(file))
+				{
+					result.add(file);
+					already.add(file);
+				}
+			}
+		}
+		
+		return result.toArray(new String[0]);
 	}
 	
 
@@ -152,8 +175,4 @@ public class FileUtility
 		return result;
 	}
 
-	public static void main(String args[])
-	{
-		createTempFileFromJar("jsunit2.3.zip");
-	}
 }

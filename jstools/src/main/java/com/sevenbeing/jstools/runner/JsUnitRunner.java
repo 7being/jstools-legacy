@@ -21,10 +21,10 @@ public class JsUnitRunner extends AbstractRunner
 	{
 		jsUnitBean = (JsUnitBean) bean;
 		
-		workDir = jsUnitBean.getFileByProperty("workdir");
-		logsDir = jsUnitBean.getFileByProperty("logsdir");
-		sourceDir = jsUnitBean.getFileByProperty("source");
-		testSourceDir = jsUnitBean.getFileByProperty("test");
+		workDir = new File(jsUnitBean.getWorkdir());
+		logsDir = new File(jsUnitBean.getLogsdir());
+		sourceDir = new File(jsUnitBean.getSource());
+		testSourceDir = new File(jsUnitBean.getTest());
 		
 		makeWorkDirectory();
 		copyJsUnitResources();
@@ -39,7 +39,7 @@ public class JsUnitRunner extends AbstractRunner
 	
 	private void makeWorkDirectory()
 	{
-		FileUtility.mkdir(jsUnitBean.getFileByProperty("workdir"));
+		FileUtility.mkdir(workDir);
 	}
 	
 	private void copyJsUnitResources()
@@ -97,8 +97,6 @@ public class JsUnitRunner extends AbstractRunner
 	
 	private String getBrowserFileNames()
 	{
-		StringBuffer result = new StringBuffer();
-
 		String[] specs = BrowserUtility.getBrowserSpecs(jsUnitBean.getBrowsers(), jsUnitBean.getClosebro(), workDir.getAbsolutePath());
 		
 		return StringUtility.join(specs, ",");

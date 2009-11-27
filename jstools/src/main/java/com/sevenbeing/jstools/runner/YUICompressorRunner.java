@@ -21,24 +21,22 @@ public class YUICompressorRunner extends AbstractRunner
 		ALL, MIN;
 	}
 
-	protected void run(Object bean)
+	protected void run(Object compressBean)
 	{
-		CompressBean compressBean = (CompressBean) bean;
-		System.out.println("********************");
-		System.out.println(compressBean.getBasedir());
-		File tmp = FileUtility.concat(new File(compressBean.getBasedir()), compressBean.getIncludes());
+		CompressBean bean = (CompressBean) compressBean;
+		File tmp = FileUtility.concat(new File(bean.getBasedir()), bean.getIncludes(), bean.getExcludes());
 
-		allInOneAny(compressBean, tmp);
+		allInOneAny(bean, tmp);
 
 		try
 		{
-			switch (compressBean.getType())
+			switch (bean.getType())
 			{
 				case JS:
-					minInOneJS(compressBean, tmp);
+					minInOneJS(bean, tmp);
 					break;
 				case CSS:
-					minInOneCSS(compressBean, tmp);
+					minInOneCSS(bean, tmp);
 					break;
 			}
 		}
