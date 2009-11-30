@@ -14,11 +14,9 @@ import java.util.Set;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Chmod;
-import org.apache.tools.ant.taskdefs.Concat;
 import org.apache.tools.ant.taskdefs.Copy;
 import org.apache.tools.ant.taskdefs.Expand;
 import org.apache.tools.ant.taskdefs.Mkdir;
-import org.apache.tools.ant.types.FileList;
 import org.apache.tools.ant.types.FileSet;
 
 public class FileUtility
@@ -31,7 +29,8 @@ public class FileUtility
 		ant.init();
 	}
 
-	public static long copy(InputStream input, OutputStream output) throws IOException
+	public static long copy(InputStream input, OutputStream output)
+			throws IOException
 	{
 		byte[] buffer = new byte[1024 * 4];
 		long count = 0;
@@ -43,7 +42,7 @@ public class FileUtility
 		}
 		return count;
 	}
-
+	
 	public static void copy(File fromFile, File toFile)
 	{
 		Copy copy = (Copy) ant.createTask("copy");
@@ -61,7 +60,7 @@ public class FileUtility
 		copy.addFileset(files);
 		copy.execute();
 	}
-	
+
 	public static void chmod(File dir, String includes, String perm)
 	{
 		Chmod chmod = (Chmod) ant.createTask("chmod");
@@ -70,7 +69,7 @@ public class FileUtility
 		chmod.setIncludes(includes);
 		chmod.execute();
 	}
-	
+
 	public static void mkdir(File path)
 	{
 		Mkdir mkdir = (Mkdir) ant.createTask("mkdir");
@@ -86,48 +85,22 @@ public class FileUtility
 		unzip.execute();
 	}
 
-	public static File concat(File baseDir, String[] includes, String[] excludes)
+	public static List<File> scanFiles(File baseDir, String[] includes,
+			String[] excludes)
 	{
-		File result = null;
-		try
-		{
-			result = File.createTempFile("concat", "tmp");
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-
-		String[] files = scanFiles(baseDir, includes, excludes);
-
-		FileList fileList = new FileList();
-		fileList.setProject(ant);
-		fileList.setDir(baseDir);
-		fileList.setFiles(StringUtility.join(files, ","));
-
-		Concat concat = (Concat) ant.createTask("concat");
-		concat.setAppend(true);
-		concat.setForce(true);
-		concat.setDestfile(result);
-		concat.addFilelist(fileList);
-
-		concat.execute();
-		return result;
-	}
-	
-	public static String[] scanFiles(File baseDir, String[] includes, String[] excludes)
-	{
-		List<String> result = new ArrayList<String>();
+		List<File> result = new ArrayList<File>();
 		Set<String> already = new HashSet<String>();
 
-		if (includes == null) includes = new String[0];
-		if (excludes == null) excludes = new String[0];
-		
+		if (includes == null)
+			includes = new String[0];
+		if (excludes == null)
+			excludes = new String[0];
+
 		List<String> excludeList = new ArrayList<String>();
 		excludeList.addAll(Arrays.asList(excludes));
 		excludeList.add("**/.*/");
 		excludes = excludeList.toArray(new String[0]);
-		
+
 		for (String include : includes)
 		{
 			DirectoryScanner scanner = new DirectoryScanner();
@@ -139,15 +112,14 @@ public class FileUtility
 			{
 				if (!already.contains(file))
 				{
-					result.add(file);
+					result.add(new File(baseDir, file).getAbsoluteFile());
 					already.add(file);
 				}
 			}
 		}
-		
-		return result.toArray(new String[0]);
+
+		return result;
 	}
-	
 
 	public static File createTempFileFromJar(String path)
 	{

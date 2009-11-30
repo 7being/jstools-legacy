@@ -16,11 +16,26 @@
               <name>William Wang</name>
               <email>7being@gmail.com</email>
             </developer>
-      </developers>
+        </developers>
 
 	<modules>
             <module>jstools</module>
             <module>maven-jstools-plugin</module>
 	</modules>
+
+        <distributionManagement>
+            <repository>
+                <id>com.originatechina.repository.build</id>
+                <name>Originate China Repository (BUILD)</name>
+                <url>file:///developer/repositories/maven</url>
+                <layout>default</layout>
+            </repository>
+        </distributionManagement>
+
+        <scm>
+            <connection>scm:svn:svn://localhost/svn/octk/tags/jstools-parent-1.0</connection>
+            <developerConnection>scm:svn:svn://localhost/svn/octk/tags/jstools-parent-1.0</developerConnection>
+        </scm>
+        
 
 </project>

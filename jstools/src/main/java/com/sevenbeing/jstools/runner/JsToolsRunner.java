@@ -20,7 +20,7 @@ public class JsToolsRunner extends AbstractRunner
 	{
 		if (null == compressBeans) return;
 
-		YUICompressorRunner runner = new YUICompressorRunner();
+		CompressRunner runner = new CompressRunner();
 
 		for (CompressBean bean : compressBeans)
 		{
