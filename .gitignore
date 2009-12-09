@@ -1,6 +1,7 @@
 pkg
 .*
 .svn
+*.pyc
 !.gitignore
 jstools/target
 maven-jstools-plugin/target
