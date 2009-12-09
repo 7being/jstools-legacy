@@ -86,13 +86,13 @@ public class JsUnitRunner extends AbstractRunner
 	
 	private String getBrowserHitUrl(int port)
 	{
-		StringBuffer buffer = new StringBuffer();
+		StringBuffer result = new StringBuffer();
 		
-		buffer.append("http://localhost:").append(port)
+		result.append("http://localhost:").append(port)
 			.append("/jsunit/jsunit/testRunner.html?testPage=http://localhost:")
 			.append(port).append("/jsunit/testSuite.html");
-		System.out.println(buffer);
-		return buffer.toString();
+		
+		return result.toString();
 	}
 	
 	private String getBrowserFileNames()
